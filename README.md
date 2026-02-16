@@ -9,7 +9,7 @@ The tool enables Architects and engineers to track changes between two versions 
 The tool classifies modifications into three distinct categories:
 * **Semantic Check**: Detects changes in attributes, Property Sets (PSets), and Quantity Sets (QSets) using graph-based comparisons.
 * **Geometric Check**: Analyzes high-level geometric properties such as volume, surface area, centroids, and bounding boxes.
-* **Shape Check**: Performs detailed 3D mesh comparison using **Hausdorff Distance** and grid-based sampling to detect subtle shape deviations.
+* **Shape Check**: Performs detailed 3D mesh comparison using **Hausdorff Distance** and grid-based sampling to detect subtle shape deviations.(Note: there is also option to use even sampler provided by Trimesh library , it is also faster )
 
 ## 📊 Reporting & Visualization
 
