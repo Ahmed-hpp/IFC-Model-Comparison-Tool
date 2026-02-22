@@ -15,78 +15,6 @@ import numpy as np
 
 
 
-# def is_element_modified(elemGraph1: nx.DiGraph, elemGraph2: nx.DiGraph, guid: str, ifc_path1: str,
-#                          ifc_path2: str,Check_Semantic: bool ,Geometery_Check : bool ,Check_Shape:bool,
-#                          use_trimesh_sampling : bool ,sampling_count:int ,over_sampling:int,
-#                          model1=None, model2=None):
-#     """
-#     Analyzes an element for modifications and returns detailed check results.
-
-#     This function performs up to three types of checks to determine if an element
-#     has been modified. Its behavior is highly conditional based on the input flags.
-
-#     1.  **Semantic Check:** Compares the element's data graphs (attributes, properties, quantities).
-#     2.  **Geometry Check:** Compares high-level geometric properties (centroid, volume, etc.) via meshes.
-#     3.  **Shape Check:** Performs a detailed comparison of the two meshes.
-
-#     **IMPORTANT:** If `Check_Shape` is `True`, the function will return a single boolean
-#     result from that check and will not include the results of the other checks.
-
-#     Args:
-#         elemGraph1 (nx.DiGraph): The data graph for the element from model V1.
-#         elemGraph2 (nx.DiGraph): The data graph for the element from model V2.
-#         guid (str): The GlobalId of the element to compare.
-#         ifc_path1 (str): Path to the original IFC model (V1).
-#         ifc_path2 (str): Path to the updated IFC model (V2).
-#         Check_Semantic (bool): If True, performs the semantic (data graph) comparison.
-#         Geometery_Check (bool): If True, performs the high-level geometric comparison.
-#         Check_Shape (bool): If True, performs a detailed mesh shape comparison and
-#             causes the function to return a single boolean value.
-#         model1 (ifcopenshell.file, optional): Pre-opened model of V1.
-#         model2 (ifcopenshell.file, optional): Pre-opened model of V2.
-
-#     Returns:
-#         Union[List[bool], bool]: The return type depends on the `Check_Shape` flag.
-#         - If `Check_Shape` is `True`:
-#             Returns a **single boolean**. `True` indicates the shapes are different.
-#         - If `Check_Shape` is `False`:
-#             Returns a **list of booleans** for each enabled check. A `True`
-#             value in the list indicates a modification was detected. To check
-#             if any modification occurred, use `any(return_value)`.
-#     """
-#     elem1 = (model1 or ifc.open(ifc_path1)).by_guid(guid)
-#     elem2 = (model2 or ifc.open(ifc_path2)).by_guid(guid)
-   
-#     check_list=[]
-#     if Check_Semantic:
-#        check_list.append(not graphs_equal(elemGraph1, elemGraph2))
-    
-#     mesh1 = None
-#     mesh2 = None
-       
-
-#     if Geometery_Check:
-#      mesh1 = geometry.generate_mesh_of_element(elem1)
-#      mesh2 = geometry.generate_mesh_of_element(elem2)
-     
-
-#      if mesh1 != False  and mesh2 !=False : 
-      
-#       geometery_data1 = geometry.extract_geometric_properties(mesh1)
-#       geometery_data2 = geometry.extract_geometric_properties(mesh2)
-      
-#       check_list.append(not(geometery_data1 == geometery_data2))
-      
-#      else :
-#         check_list.append(not (mesh1 == mesh2) )
-
-#     if Check_Shape : 
-#        check_list.append(geometry.are_meshes_different(mesh1 , mesh2  , use_trimesh_sampling , sampling_count ,
-#                                                         over_sampling)) # the function here returns true if the meshes are different
-
-#     return check_list
-
-
 def is_element_modified(element_graph1: nx.DiGraph, element_graph2: nx.DiGraph, 
                         guid: str, ifc_path1: str, ifc_path2: str,
                         check_semantic: bool, geometry_check: bool, check_shape: bool,
@@ -219,36 +147,6 @@ def find_modified_elements_guids(ifc_path1: str, ifc_path2: str, ifc_type: str,
 
 
 
-
-# def find_unmodified_elements_guids(ifc_path1 :str  , ifc_path2:str , ifcType:str , Semantic_check :bool
-#                                    , Geometry_check :bool  , Shape_check : bool  , use_trimesh_sampling :bool ,
-#                                      sampling_count :int,over_sampling : int ,model1 = None ,model2=None ):
-#     """Finds elements that are "unmodified" between two versions of an IFC model.
-
-#     This function lets you define what 'unmodified' means by enabling checks
-#     for different types of changes:
-#     - `Semantic_check`: For properties and attributes.
-#     - `Geometry_check`: For location, placement, and rotation.
-#     - `Shape_check`: For the detailed 3D mesh form.
-    
-#     Returns a list of GUIDs for elements that pass all enabled checks.
-#     """
-#     model1 = model1 or ifc.open(ifc_path1)
-#     model2 = model2 or ifc.open(ifc_path2)
-#     unmodified_guids =[]
-#     Shared_guids = core_ifc.get_shared_element_guids(ifc_path1 , ifc_path2 , ifcType , model1, model2)
-#     for guid in Shared_guids :
-#        G1 = semantics.create_element_graph(guid , model1)
-#        G2 = semantics.create_element_graph(guid , model2)
-#        checks = is_element_modified(G1 , G2 , guid , ifc_path1 , ifc_path2 , Semantic_check , Geometry_check ,
-#                                Shape_check ,use_trimesh_sampling , sampling_count , over_sampling ,model1 , model2)
-#        if any(checks):
-#           continue
-#        else:
-#           unmodified_guids.append(guid)
-
-#     return unmodified_guids
-    
 
 def find_unmodified_elements_guids(ifc_path1: str, ifc_path2: str, ifc_type: str, 
                                    semantic_check: bool, geometry_check: bool, 
@@ -622,3 +520,4 @@ def check_if_element_moved(
     move_dist = np.linalg.norm(translation)
 
     return move_dist > tolerance
+
